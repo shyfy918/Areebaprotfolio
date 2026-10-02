@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="color-scheme" content="dark" />
+<meta name="supported-color-schemes" content="dark" />
+<title>Dr. Areeba Batool — Dental e-Portfolio</title>
+<meta name="description" content="A reflective e-portfolio documenting the dental journey of Dr. Areeba Batool, BDS student (2025–2029)." />
+<meta name="author" content="Dr. Areeba Batool" />
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+<!-- Favicon (inline SVG: AB monogram on blue tile + pink dot) -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%231d4a7a'/%3E%3Cstop offset='100%25' stop-color='%232c6aa0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='14' fill='url(%23g)'/%3E%3Ccircle cx='20' cy='18' r='20' fill='%23ffffff' opacity='0.08'/%3E%3Ctext x='30' y='40' text-anchor='middle' font-family='Playfair Display, Georgia, serif' font-size='20' font-weight='700' fill='%23ffffff' letter-spacing='0.5'%3EAB%3C/text%3E%3Ccircle cx='50' cy='18' r='3.4' fill='%23f8c4d2'/%3E%3C/svg%3E" />
+
+<!-- Tailwind Play CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          /* === Dark theme palette === */
+          background: '#0d1622',        /* deep navy-charcoal */
+          foreground: '#f0f3f8',        /* near-white */
+          card: '#1a2538',              /* elevated dark surface */
+          'card-foreground': '#f0f3f8',
+          primary: '#5a9fd4',           /* bright blue — pops on dark */
+          'primary-foreground': '#0d1622',
+          secondary: '#3a2230',         /* muted dark pink surface */
+          'secondary-foreground': '#f0d0d8',
+          muted: '#1f2a3d',
+          'muted-foreground': '#8b9aaf',
+          accent: '#f8c4d2',            /* brighter pink for dark */
+          'accent-foreground': '#0d1622',
+          border: 'rgba(255,255,255,0.10)'
+        },
+        fontFamily: {
+          serif: ['"Playfair Display"', 'Georgia', 'serif'],
+          sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif']
+        }
+      }
+    }
+  };
+</script>
+
+<style>
+  /* === Base === */
+  * { box-sizing: border-box; }
+  html, body { min-height: 100%; margin: 0; }
+  /* Tell the browser + Dark Reader + similar extensions that this page is
+     already dark-themed. Dark Reader respects this and will NOT inject its
+     own dark-mode CSS, which keeps the page visually consistent. */
+  :root { color-scheme: dark; }
+  body {
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    color: #f0f3f8;
+    position: relative;
+    background-color: #0d1622;
+    /* Layered radial gradients tuned for dark — brighter glows so they read against the navy.
+       NOTE: `background-attachment: fixed` removed because it causes rendering bugs
+       inside iframes on iOS Safari (the gradients would jump/disappear on scroll). */
+    background-image:
+      radial-gradient(900px circle at 0% 0%, rgba(90, 159, 212, 0.30) 0%, transparent 55%),
+      radial-gradient(760px circle at 100% 0%, rgba(120, 140, 180, 0.18) 0%, transparent 50%),
+      radial-gradient(700px circle at 100% 100%, rgba(248, 196, 210, 0.28) 0%, transparent 55%),
+      radial-gradient(600px circle at 0% 100%, rgba(70, 120, 170, 0.25) 0%, transparent 55%);
+    background-repeat: no-repeat;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Noise overlay — tuned for dark backgrounds.
+     mix-blend-mode: screen makes the noise subtle-but-present against dark. */
+  body::before {
+    content: "";
+    position: fixed; inset: 0;
+    pointer-events: none; z-index: 0;
+    opacity: 0.22;
+    mix-blend-mode: screen;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.45 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    background-size: 240px 240px;
+  }
+
+  /* Faint white dot-grid — barely visible against dark, but adds texture */
+  body::after {
+    content: "";
+    position: fixed; inset: 0;
+    pointer-events: none; z-index: 0;
+    opacity: 0.45;
+    background-image: radial-gradient(circle, rgba(240, 243, 248, 0.10) 1px, transparent 1.4px);
+    background-size: 22px 22px;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 8%, black 92%, transparent 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, black 8%, black 92%, transparent 100%);
+  }
+
+  #site-root { position: relative; z-index: 1; }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', Georgia, serif;
+  }
+
+  /* === Reusable accent helpers === */
+  .heading-underline { position: relative; display: inline-block; padding-bottom: 0.35rem; }
+  .heading-underline::after {
+    content: ""; position: absolute; left: 0; bottom: 0;
+    height: 3px; width: 2.5rem; border-radius: 2px;
+    background: linear-gradient(to right, #5a9fd4 0%, #5a9fd4 60%, #f8c4d2 60%, #f8c4d2 100%);
+  }
+  .pink-dot::before {
+    content: ""; display: inline-block; width: 6px; height: 6px;
+    border-radius: 9999px; background: #f8c4d2; margin-right: 0.5rem; vertical-align: middle;
+  }
+
+  /* === Surfaces — soft black-tinted shadows + subtle top highlight === */
+  .surface {
+    background-color: #1a2538;
+    box-shadow:
+      0 1px 0 0 rgba(255,255,255,0.06) inset,
+      0 1px 2px -1px rgba(0,0,0,0.4),
+      0 8px 24px -12px rgba(0,0,0,0.55),
+      0 24px 48px -28px rgba(0,0,0,0.65);
+  }
+  .surface-glass {
+    background-color: rgba(26, 37, 56, 0.65);
+    backdrop-filter: blur(12px) saturate(140%);
+    -webkit-backdrop-filter: blur(12px) saturate(140%);
+    box-shadow:
+      0 1px 0 0 rgba(255,255,255,0.05) inset,
+      0 8px 24px -12px rgba(0,0,0,0.5),
+      0 24px 48px -28px rgba(0,0,0,0.6);
+  }
+  .surface-hover { transition: box-shadow 0.3s ease, transform 0.3s ease; }
+  .surface-hover:hover {
+    transform: translateY(-2px);
+    box-shadow:
+      0 1px 0 0 rgba(255,255,255,0.08) inset,
+      0 2px 4px -1px rgba(0,0,0,0.45),
+      0 12px 32px -10px rgba(0,0,0,0.6),
+      0 32px 56px -24px rgba(0,0,0,0.7);
+  }
+
+  /* === View fade === */
+  @keyframes viewFade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  .view-fade { animation: viewFade 0.45s ease-out; }
+
+  /* === View switching === */
+  .view { display: none; }
+  .view.active { display: block; }
+
+  /* === Header nav active indicator === */
+  .nav-btn.is-active { color: #5a9fd4 !important; }
+  .nav-btn.is-active::after {
+    content: ""; position: absolute; left: 50%; bottom: -0.125rem;
+    height: 3px; width: 1.5rem; transform: translateX(-50%);
+    background: linear-gradient(to right, #5a9fd4, #f8c4d2);
+    border-radius: 9999px;
+  }
+  .nav-btn-m.is-active { background-color: rgba(90,159,212,0.15); color: #5a9fd4 !important; }
+
+  /* === Mobile menu === */
+  #mobile-menu { display: none; }
+  #mobile-menu.open { display: block; }
+  #mobile-toggle { display: none; }
+  @media (max-width: 767px) {
+    #desktop-nav { display: none; }
+    #mobile-toggle { display: inline-flex; }
+  }
+
+  /* === Scrollbar === */
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #2a3a52; border-radius: 6px; }
+  ::-webkit-scrollbar-thumb:hover { background: #3d5475; }
+
+  /* === Break-anywhere utility — let long emails/IDs wrap cleanly on mobile === */
+  .break-anywhere {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  /* === Mobile tuning — dial down body glow + noise so in-card glows don't fight === */
+  @media (max-width: 640px) {
+    body {
+      background-image:
+        radial-gradient(600px circle at 0% 0%, rgba(90, 159, 212, 0.22) 0%, transparent 55%),
+        radial-gradient(500px circle at 100% 100%, rgba(248, 196, 210, 0.18) 0%, transparent 55%);
+    }
+    body::before { opacity: 0.15; }
+    body::after { opacity: 0.30; }
+  }
+
+  /* iOS safe-area insets — keep content clear of notch / home indicator */
+  @supports (padding: env(safe-area-inset-top)) {
+    header.sticky,
+    footer.mt-auto {
+      padding-top: max(0.5rem, env(safe-area-inset-top));
+      padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+    }
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .view-fade { animation: none; }
+    .surface-hover { transition: none; }
+    html { scroll-behavior: auto; }
+  }
+  html { scroll-behavior: smooth; }
+</style>
+</head>
+<body>
+<div id="site-root" class="flex min-h-screen flex-col">
+
+  <!-- ============================ HEADER ============================ -->
+  <header class="sticky top-0 z-40 border-b border-border bg-background/85 backdrop-blur">
+    <div class="h-1 w-full bg-gradient-to-r from-primary via-primary to-accent"></div>
+    <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
+      <!-- Brand -->
+      <button onclick="navigate('home')" class="group flex items-center gap-3 text-left" aria-label="Go to home">
+        <span class="relative inline-flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl sm:h-11 sm:w-11" style="background: linear-gradient(135deg,#1d4a7a 0%,#2c6aa0 100%);" aria-hidden="true">
+          <svg viewBox="0 0 64 64" class="h-full w-full">
+            <circle cx="20" cy="18" r="20" fill="#ffffff" opacity="0.08" />
+            <text x="30" y="40" text-anchor="middle" font-family="Playfair Display, Georgia, serif" font-size="20" font-weight="700" fill="#ffffff" letter-spacing="0.5">AB</text>
+            <circle cx="50" cy="18" r="3.4" fill="#f8c4d2" />
+          </svg>
+        </span>
+        <div class="leading-tight">
+          <p class="text-xs uppercase tracking-[0.18em] text-muted-foreground">Dental e-Portfolio</p>
+          <p class="font-serif text-base font-semibold text-primary sm:text-lg">Dr. Areeba Batool</p>
+        </div>
+      </button>
+
+      <!-- Desktop nav -->
+      <nav id="desktop-nav" class="flex items-center gap-1" aria-label="Main">
+        <button onclick="navigate('home')" class="nav-btn relative rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:text-primary transition-colors" data-view="home">MY DENTAL JOURNEY</button>
+        <button onclick="navigate('bds1')" class="nav-btn relative rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:text-primary transition-colors" data-view="bds1">BDS 1st Year [2026-2027]</button>
+        <button onclick="navigate('about')" class="nav-btn relative rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:text-primary transition-colors" data-view="about">About ME...</button>
+        <button onclick="navigate('gibbs')" class="nav-btn relative rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:text-primary transition-colors" data-view="gibbs">Gibbs' Reflective Model</button>
+      </nav>
+
+      <!-- Mobile toggle -->
+      <button id="mobile-toggle" onclick="toggleMobile()" class="inline-flex h-10 items-center justify-center rounded-md border border-border px-3 text-primary" aria-label="Toggle menu">
+        <svg id="menu-open-icon" viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" /></svg>
+        <svg id="menu-close-icon" viewBox="0 0 24 24" class="hidden h-5 w-5" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M6 18L18 6" stroke-linecap="round" /></svg>
+      </button>
+    </div>
+
+    <!-- Mobile menu -->
+    <div id="mobile-menu" class="border-t border-border bg-background">
+      <nav class="mx-auto flex max-w-6xl flex-col px-4 py-2 sm:px-6" aria-label="Mobile">
+        <button onclick="navigate('home')" class="nav-btn-m rounded-md px-3 py-3 text-left text-sm font-medium text-muted-foreground hover:text-primary" data-view="home">MY DENTAL JOURNEY</button>
+        <button onclick="navigate('bds1')" class="nav-btn-m rounded-md px-3 py-3 text-left text-sm font-medium text-muted-foreground hover:text-primary" data-view="bds1">BDS 1st Year [2026-2027]</button>
+        <button onclick="navigate('about')" class="nav-btn-m rounded-md px-3 py-3 text-left text-sm font-medium text-muted-foreground hover:text-primary" data-view="about">About ME...</button>
+        <button onclick="navigate('gibbs')" class="nav-btn-m rounded-md px-3 py-3 text-left text-sm font-medium text-muted-foreground hover:text-primary" data-view="gibbs">Gibbs' Reflective Model</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ============================ MAIN ============================ -->
+  <main class="flex-1">
+
+    <!-- ============== HOME ============== -->
+    <section id="view-home" class="view mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
+      <!-- Hero -->
+      <div class="relative overflow-hidden rounded-3xl border border-border surface-glass px-6 py-12 sm:px-12 sm:py-16 lg:px-16">
+        <span class="pointer-events-none absolute -left-10 -top-10 h-40 w-40 rounded-full blur-3xl" style="background: radial-gradient(circle,#5a9fd4 0%,transparent 70%);"></span>
+        <span class="pointer-events-none absolute -bottom-12 -right-8 h-40 w-40 rounded-full blur-3xl" style="background: radial-gradient(circle,#f8c4d2 0%,transparent 70%);"></span>
+        <p class="relative text-xs font-medium uppercase tracking-[0.22em] text-accent">Dental e-Portfolio</p>
+        <h1 class="relative mt-3 font-serif text-3xl font-semibold leading-tight text-primary sm:text-4xl lg:text-5xl xl:text-6xl">My Journey in Dentistry<span class="text-accent">.</span></h1>
+        <p class="relative mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+          Hi, I&rsquo;m <span class="font-semibold text-foreground whitespace-nowrap">Dr.&nbsp;Areeba&nbsp;Batool</span>&nbsp;—&nbsp;a BDS student documenting her growth across clinical rotations, reflections, and the small lessons that shape a future clinician.
+        </p>
+        <div class="relative mt-6 flex flex-wrap items-center gap-3">
+          <button onclick="navigate('gibbs')" class="inline-flex h-11 items-center justify-center rounded-md bg-primary px-5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:bg-primary/90">Read My Reflections</button>
+          <button onclick="navigate('about')" class="inline-flex h-11 items-center justify-center rounded-md border border-primary/40 bg-primary/10 px-5 text-sm font-semibold text-primary backdrop-blur transition hover:border-primary/60 hover:bg-primary/15">About Me</button>
+        </div>
+      </div>
+
+      <!-- Introductory Profile -->
+      <div class="mt-12 grid gap-8 lg:mt-16 lg:grid-cols-3">
+        <div class="lg:col-span-1">
+          <p class="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">Section 01</p>
+          <h2 class="mt-2 font-serif text-2xl font-semibold text-primary sm:text-3xl">Introductory Profile</h2>
+          <span class="heading-underline mt-3"></span>
+          <p class="mt-4 text-sm leading-relaxed text-muted-foreground">A snapshot of my academic identity and the rotation departments I am currently moving through.</p>
+        </div>
+        <div class="surface rounded-2xl border border-border p-6 sm:p-8 lg:col-span-2">
+          <dl class="grid gap-x-8 gap-y-5 sm:grid-cols-2">
+            <div><dt class="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">Name</dt><dd class="mt-1 font-serif text-base font-medium text-foreground">Dr. Areeba Batool</dd></div>
+            <div><dt class="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">Academic Year</dt><dd class="mt-1 font-serif text-base font-medium text-foreground">2025 – 2029</dd></div>
+            <div><dt class="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">Roll Number</dt><dd class="mt-1 font-serif text-base font-medium text-foreground">SU91-BDSMM-F25-006</dd></div>
+            <div><dt class="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">Department</dt><dd class="mt-1 font-serif text-base font-medium text-foreground">Dentistry</dd></div>
+          </dl>
+          <div class="mt-6 border-t border-dashed border-border pt-5">
+            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">Rotation Departments</p>
+            <ul class="mt-3 grid gap-2 sm:grid-cols-2">
+              <li class="flex items-center rounded-md bg-secondary/40 px-3 py-2 text-sm text-secondary-foreground"><span class="pink-dot"></span><span class="font-medium">Community Dentistry</span></li>
+              <li class="flex items-center rounded-md bg-secondary/40 px-3 py-2 text-sm text-secondary-foreground"><span class="pink-dot"></span><span class="font-medium">Communication Skills</span></li>
+              <li class="flex items-center rounded-md bg-secondary/40 px-3 py-2 text-sm text-secondary-foreground"><span class="pink-dot"></span><span class="font-medium">Radiology</span></li>
+              <li class="flex items-center rounded-md bg-secondary/40 px-3 py-2 text-sm text-secondary-foreground"><span class="pink-dot"></span><span class="font-medium">Oral Medicine &amp; Diagnostics</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact strip -->
+      <div class="mt-10 overflow-hidden rounded-2xl border border-border surface">
+        <div class="grid items-center gap-6 bg-gradient-to-br from-primary to-primary/80 p-6 text-primary-foreground sm:grid-cols-3 sm:p-8">
+          <div class="sm:col-span-2">
+            <p class="text-xs font-medium uppercase tracking-[0.2em] text-primary-foreground/70">Contact</p>
+            <p class="break-anywhere mt-1 font-serif text-lg font-semibold sm:text-2xl">su91-bdsmm-f25-006@superior.edu.pk</p>
+          </div>
+          <div class="flex sm:justify-end">
+            <a href="mailto:su91-bdsmm-f25-006@superior.edu.pk" class="inline-flex h-11 items-center justify-center rounded-md bg-white/15 px-5 text-sm font-semibold text-primary-foreground ring-1 ring-white/25 backdrop-blur transition hover:bg-white/25">
+              Send an Email
+              <svg viewBox="0 0 24 24" class="ml-2 h-4 w-4" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============== BDS 1st YEAR ============== -->
+    <section id="view-bds1" class="view mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
+      <!-- Hero -->
+      <div class="relative overflow-hidden rounded-3xl border border-border surface-glass px-6 py-12 sm:px-12 sm:py-14">
+        <span class="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full blur-3xl" style="background: radial-gradient(circle,#5a9fd4 0%,transparent 70%);"></span>
+        <span class="pointer-events-none absolute -bottom-12 -left-8 h-36 w-36 rounded-full blur-3xl" style="background: radial-gradient(circle,#f8c4d2 0%,transparent 70%);"></span>
+        <p class="relative text-xs font-medium uppercase tracking-[0.22em] text-accent">Academic Year</p>
+        <h1 class="relative mt-3 font-serif text-3xl font-semibold text-primary sm:text-4xl lg:text-5xl">BDS 1st Year · 2026 – 2027</h1>
+        <span class="heading-underline mt-3"></span>
+        <p class="relative mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground">
+          The first year of the BDS programme lays the foundation — dental anatomy, oral histology, biochemistry, and early clinical observation. Reflections, case notes, and rotation updates for this year will be added here as the sessions progress.
+        </p>
+      </div>
+
+      <!-- Year info grid -->
+      <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="surface surface-hover rounded-xl border border-border p-5"><p class="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">Year</p><p class="mt-1 font-serif text-lg font-semibold text-foreground">1st BDS</p></div>
+        <div class="surface surface-hover rounded-xl border border-border p-5"><p class="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">Session</p><p class="mt-1 font-serif text-lg font-semibold text-foreground">2026 – 2027</p></div>
+        <div class="surface surface-hover rounded-xl border border-border p-5"><p class="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">Programme</p><p class="mt-1 font-serif text-lg font-semibold text-foreground">BDS</p></div>
+        <div class="surface surface-hover rounded-xl border border-border p-5"><p class="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">Status</p><p class="mt-1 font-serif text-lg font-semibold text-foreground">In Progress</p></div>
+      </div>
+
+      <!-- Foundation Subjects -->
+      <div class="mt-10 surface rounded-2xl border border-border p-6 sm:p-8">
+        <div class="flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">Section 01</p>
+            <h2 class="mt-2 font-serif text-xl font-semibold text-primary sm:text-2xl">Foundation Subjects</h2>
+            <span class="heading-underline mt-2"></span>
+          </div>
+          <p class="text-xs text-muted-foreground">Year 1 · Curriculum overview</p>
+        </div>
+        <ul class="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <li class="flex items-center gap-3 rounded-lg border border-border bg-background/60 px-4 py-3 backdrop-blur"><span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">01</span><span class="text-sm font-medium text-foreground">Dental Anatomy</span></li>
+          <li class="flex items-center gap-3 rounded-lg border border-border bg-background/60 px-4 py-3 backdrop-blur"><span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">02</span><span class="text-sm font-medium text-foreground">Oral Histology</span></li>
+          <li class="flex items-center gap-3 rounded-lg border border-border bg-background/60 px-4 py-3 backdrop-blur"><span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">03</span><span class="text-sm font-medium text-foreground">Biochemistry</span></li>
+          <li class="flex items-center gap-3 rounded-lg border border-border bg-background/60 px-4 py-3 backdrop-blur"><span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">04</span><span class="text-sm font-medium text-foreground">Physiology</span></li>
+          <li class="flex items-center gap-3 rounded-lg border border-border bg-background/60 px-4 py-3 backdrop-blur"><span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">05</span><span class="text-sm font-medium text-foreground">Dental Materials</span></li>
+          <li class="flex items-center gap-3 rounded-lg border border-border bg-background/60 px-4 py-3 backdrop-blur"><span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">06</span><span class="text-sm font-medium text-foreground">Community Dentistry (intro)</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============== ABOUT ============== -->
+    <section id="view-about" class="view mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
+      <div class="grid items-stretch gap-8 lg:grid-cols-12">
+        <div class="lg:col-span-7">
+          <p class="text-xs font-medium uppercase tracking-[0.22em] text-accent">A Glimpse of Me</p>
+          <h1 class="mt-2 font-serif text-3xl font-semibold text-primary sm:text-4xl lg:text-5xl">A Glimpse of Me...</h1>
+          <span class="heading-underline mt-3"></span>
+          <p class="mt-6 text-base leading-relaxed text-muted-foreground">
+            <span class="font-serif text-2xl font-semibold text-primary">Hi,</span>
+            I am Areeba Batool — a BDS student with a strong interest in developing my knowledge, practical skills, and professional attitude in dentistry. This e-portfolio documents my learning experiences, reflections, achievements, and personal growth throughout my academic and clinical rotations.
+          </p>
+          <p class="mt-4 text-base leading-relaxed text-muted-foreground">
+            My aim is to connect theoretical knowledge with practical experience — to learn from each clinical encounter, identify areas for improvement, and gradually grow into a competent, ethical, and compassionate dental professional.
+          </p>
+          <div class="mt-8 flex flex-wrap items-center gap-3">
+            <button onclick="navigate('gibbs')" class="inline-flex h-11 items-center justify-center rounded-md bg-primary px-5 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90">See my Gibbs reflections</button>
+            <button onclick="navigate('home')" class="inline-flex h-11 items-center justify-center rounded-md border border-primary/40 bg-primary/10 px-5 text-sm font-semibold text-primary backdrop-blur transition hover:border-primary/60 hover:bg-primary/15">Back to home</button>
+          </div>
+        </div>
+
+        <div class="lg:col-span-5">
+          <div class="surface relative h-full overflow-hidden rounded-2xl border border-primary/30 bg-gradient-to-br from-primary/10 via-background to-background p-8">
+            <span class="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full blur-3xl" style="background: radial-gradient(circle,#5a9fd4 0%,transparent 70%);"></span>
+            <span class="pointer-events-none absolute -bottom-10 -left-10 h-28 w-28 rounded-full blur-3xl" style="background: radial-gradient(circle,#f8c4d2 0%,transparent 70%);"></span>
+            <p class="relative text-xs font-medium uppercase tracking-[0.22em] text-accent">Currently</p>
+            <p class="relative mt-3 font-serif text-2xl font-semibold text-primary sm:text-3xl">Dental Student</p>
+            <p class="relative mt-1 text-sm text-muted-foreground">ANDC · Lahore</p>
+            <div class="relative mt-8 grid grid-cols-2 gap-4">
+              <div><p class="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">Year</p><p class="mt-1 font-serif text-base font-semibold text-foreground">BDS · 2025 – 2029</p></div>
+              <div><p class="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">Roll No.</p><p class="mt-1 font-mono break-anywhere text-base font-semibold text-foreground">SU91-BDSMM-F25-006</p></div>
+            </div>
+            <blockquote class="relative mt-8 border-l-2 border-accent pl-4 text-sm italic leading-relaxed text-foreground/80">
+              &ldquo;A clinician is not made in a day — every patient, every reflection, every small correction counts.&rdquo;
+            </blockquote>
+          </div>
+        </div>
+      </div>
+
+      <!-- Education -->
+      <div class="mt-14 lg:mt-20">
+        <div class="mb-8 flex items-end justify-between gap-4">
+          <div>
+            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">Section 02</p>
+            <h2 class="mt-2 font-serif text-2xl font-semibold text-primary sm:text-3xl">Education</h2>
+            <span class="heading-underline mt-3"></span>
+          </div>
+        </div>
+        <ol class="relative grid gap-6 sm:grid-cols-3">
+          <li class="surface surface-hover relative rounded-2xl border border-border p-6">
+            <div class="mb-3 flex items-center gap-3"><span class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">01</span><p class="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">Matriculation</p></div>
+            <h3 class="font-serif text-lg font-semibold text-primary">The Spirit School</h3>
+            <p class="text-sm text-muted-foreground">Lahore</p>
+          </li>
+          <li class="surface surface-hover relative rounded-2xl border border-border p-6">
+            <div class="mb-3 flex items-center gap-3"><span class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">02</span><p class="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">Intermediate</p></div>
+            <h3 class="font-serif text-lg font-semibold text-primary">KIPS College</h3>
+            <p class="text-sm text-muted-foreground">Lahore</p>
+          </li>
+          <li class="surface surface-hover relative overflow-hidden rounded-2xl border border-border p-6">
+            <span class="absolute right-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-accent/15 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.15em] text-accent">
+              <span class="h-1.5 w-1.5 rounded-full bg-accent"></span>
+              Currently
+            </span>
+            <div class="mb-3 flex items-center gap-3"><span class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">03</span><p class="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">In Progress</p></div>
+            <h3 class="font-serif text-lg font-semibold text-primary">Dental Student</h3>
+            <p class="text-sm text-muted-foreground">ANDC · Lahore</p>
+            <span class="absolute -bottom-6 -right-6 h-16 w-16 rounded-full bg-accent/20 blur-xl"></span>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ============== GIBBS ============== -->
+    <section id="view-gibbs" class="view mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
+      <!-- Page header -->
+      <header class="relative overflow-hidden rounded-3xl border border-border surface-glass px-6 py-10 sm:px-12 sm:py-12">
+        <span class="pointer-events-none absolute -left-10 -top-10 h-40 w-40 rounded-full blur-3xl" style="background: radial-gradient(circle,#5a9fd4 0%,transparent 70%);"></span>
+        <span class="pointer-events-none absolute -bottom-12 -right-8 h-40 w-40 rounded-full blur-3xl" style="background: radial-gradient(circle,#f8c4d2 0%,transparent 70%);"></span>
+        <p class="relative text-xs font-medium uppercase tracking-[0.22em] text-accent">Reflection</p>
+        <h1 class="relative mt-2 font-serif text-3xl font-semibold text-primary sm:text-4xl lg:text-5xl">Gibbs&rsquo; Reflective Cycle</h1>
+        <span class="heading-underline mt-3"></span>
+        <p class="relative mt-5 max-w-3xl text-base leading-relaxed text-muted-foreground">
+          A structured reflection on each rotation, organised around the six stages of Gibbs&rsquo; Reflective Cycle — Description, Feelings, Evaluation, Analysis, Conclusion, and Action Plan.
+        </p>
+      </header>
+
+      <!-- Rotations Overview -->
+      <div class="mt-12 grid gap-6 lg:grid-cols-3">
+        <div class="lg:col-span-1">
+          <h2 class="font-serif text-xl font-semibold text-primary">Rotations Overview</h2>
+          <span class="heading-underline mt-2"></span>
+        </div>
+        <div class="surface rounded-2xl border border-border p-6 sm:p-8 lg:col-span-2">
+          <p class="text-sm leading-relaxed text-muted-foreground">
+            During these rotations I had the opportunity to observe and participate in various learning activities across four departments. The exposure helped me connect theoretical concepts with real clinical situations, and improved my communication, observation, teamwork, and professional conduct. The reflections below are organised by department, in the order in which the rotations were completed.
+          </p>
+          <ol class="mt-5 grid gap-2 sm:grid-cols-2">
+            <li class="flex items-center gap-3 rounded-md bg-muted/40 px-3 py-2"><span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">1</span><span class="text-sm font-medium text-foreground">Community Dentistry</span></li>
+            <li class="flex items-center gap-3 rounded-md bg-muted/40 px-3 py-2"><span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">2</span><span class="text-sm font-medium text-foreground">Communication Skills</span></li>
+            <li class="flex items-center gap-3 rounded-md bg-muted/40 px-3 py-2"><span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">3</span><span class="text-sm font-medium text-foreground">Radiology</span></li>
+            <li class="flex items-center gap-3 rounded-md bg-muted/40 px-3 py-2"><span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">4</span><span class="text-sm font-medium text-foreground">Oral Medicine &amp; Diagnostics</span></li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- Reflections -->
+      <div class="mt-12 space-y-10" id="reflections-container">
+        <!-- Reflections are rendered here by JS -->
+      </div>
+
+      <!-- Sign-off -->
+      <div class="mt-14 surface rounded-2xl border border-border p-6 sm:p-8">
+        <div class="flex items-center gap-3">
+          <span class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">AB</span>
+          <div>
+            <p class="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">Sign-off</p>
+            <p class="mt-1 font-serif text-xl font-semibold text-foreground">Regards, Dr. Areeba Batool</p>
+          </div>
+        </div>
+        <p class="mt-3 text-sm text-muted-foreground">BDS Student · 2025 – 2029</p>
+        <span class="mt-4 inline-flex h-1 w-12 rounded-full bg-gradient-to-r from-primary to-accent"></span>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============================ FOOTER ============================ -->
+  <footer class="mt-auto border-t border-border bg-muted/30">
+    <div class="mx-auto max-w-6xl px-4 py-8 sm:px-6">
+      <div class="flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
+        <div class="flex items-center gap-3">
+          <span class="relative inline-flex h-9 w-9 items-center justify-center overflow-hidden rounded-xl" style="background: linear-gradient(135deg,#1d4a7a 0%,#2c6aa0 100%);" aria-hidden="true">
+            <svg viewBox="0 0 64 64" class="h-full w-full">
+              <circle cx="20" cy="18" r="20" fill="#ffffff" opacity="0.08" />
+              <text x="30" y="40" text-anchor="middle" font-family="Playfair Display, Georgia, serif" font-size="20" font-weight="700" fill="#ffffff" letter-spacing="0.5">AB</text>
+              <circle cx="50" cy="18" r="3.4" fill="#f8c4d2" />
+            </svg>
+          </span>
+          <div class="leading-tight">
+            <p class="font-serif text-sm font-semibold text-primary">Dr. Areeba Batool</p>
+            <p class="text-xs text-muted-foreground">BDS Student · Academic Year 2025 – 2029</p>
+          </div>
+        </div>
+        <nav class="flex flex-wrap gap-x-5 gap-y-2" aria-label="Footer">
+          <button onclick="navigate('home')" class="text-xs font-medium text-muted-foreground transition-colors hover:text-primary">MY DENTAL JOURNEY</button>
+          <button onclick="navigate('bds1')" class="text-xs font-medium text-muted-foreground transition-colors hover:text-primary">BDS 1st Year [2026-2027]</button>
+          <button onclick="navigate('about')" class="text-xs font-medium text-muted-foreground transition-colors hover:text-primary">About ME...</button>
+          <button onclick="navigate('gibbs')" class="text-xs font-medium text-muted-foreground transition-colors hover:text-primary">Gibbs' Reflective Model</button>
+        </nav>
+        <a href="mailto:su91-bdsmm-f25-006@superior.edu.pk" class="text-xs font-medium text-primary underline decoration-accent decoration-2 underline-offset-4 hover:text-primary/80">su91-bdsmm-f25-006@superior.edu.pk</a>
+      </div>
+      <div class="mt-6 border-t border-border pt-4">
+        <p class="text-xs text-muted-foreground">© <span id="footer-year"></span> Dr. Areeba Batool. A reflective e-portfolio created for academic purposes.</p>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script>
+  // ============================================================
+  // REFLECTIONS DATA — same content as the Next.js version
+  // ============================================================
+  var REFLECTIONS = [
+    {
+      id: 1, department: "Community Dentistry",
+      stages: [
+        { stage: "Description", body: "I joined a community dentistry outreach session organized for a local school. My role was to assist with screening children for visible caries, demonstrate brushing technique on a model, and hand out oral hygiene kits. The session was supervised by a senior dental public health officer, who guided us through the patient flow and the recording of basic findings on the field form." },
+        { stage: "Feelings", body: "I was initially unsure how to keep a row of waiting children engaged, and I worried that my screening notes might be inconsistent. As the morning went on, I grew more confident because the workflow became predictable and the supervisor gave brief, encouraging feedback after each group." },
+        { stage: "Evaluation", body: "The positive side was real-world interaction: I saw how social context shapes oral health behaviour, not just clinical findings. The negative side was that I struggled to keep my screening time consistent — I spent longer with cooperative children and rushed through the more reluctant ones." },
+        { stage: "Analysis", body: "Community dentistry complements chair-side work by treating populations instead of individual patients. I realised that prevention at scale depends on three things: a clear message, a short and repeatable screening protocol, and trust built in the first thirty seconds of contact. My time management issue reflected a protocol that I had internalised rather than written down." },
+        { stage: "Conclusion", body: "If I had a short, printed screening checklist in hand, I could keep the pace consistent without sacrificing rapport. More importantly, I understood that community work is not a softer form of dentistry — it requires deliberate preparation, because there is no unit-chair to fall back on." },
+        { stage: "Action Plan", body: "I will prepare a one-page screening checklist before the next outreach, time each child for a maximum of two minutes, and volunteer for the post-session briefing so I can present findings and receive structured feedback from the supervisor." }
+      ]
+    },
+    {
+      id: 2, department: "Communication Skills",
+      stages: [
+        { stage: "Description", body: "In the communication skills rotation we role-played patient interviews in pairs, with one student playing a patient who had just been told they needed a multi-visit treatment plan. We practiced a structured framework (SPIKES) for breaking news, took simulated case histories, and received peer feedback on tone, pacing, and non-verbal cues." },
+        { stage: "Feelings", body: "I was nervous before the first role-play because I worried about sounding rehearsed or cold. Once I let the patient speak without interrupting, I felt calmer and more present, and I noticed that the silence after a piece of bad news was the hardest part to tolerate." },
+        { stage: "Evaluation", body: "What worked well was active listening — leaning forward, mirroring the patient's posture, and summarising what they said before responding. What did not work was my tendency to fill silences too quickly, which undercut the patient's chance to process the information." },
+        { stage: "Analysis", body: "Communication in dentistry is not soft skill padding; it is the bridge between diagnosis and consent. A patient who feels heard will share symptoms more accurately, accept the proposed plan, and return for follow-up. The framework helped because it gave me permission to pause — the silence is part of the treatment, not a gap in it." },
+        { stage: "Conclusion", body: "I should slow down. The next time I deliver news I will allow at least five seconds of silence after the key sentence, and check understanding by asking the patient to restate the plan in their own words rather than asking only if they have questions." },
+        { stage: "Action Plan", body: "I will record one role-play per week and review it against a simple checklist: did I introduce myself, listen first, allow silence, summarise, and check understanding? I will also ask a senior to observe a real case and give written feedback." }
+      ]
+    },
+    {
+      id: 3, department: "Radiology",
+      stages: [
+        { stage: "Description", body: "During the radiology rotation I observed the acquisition of intraoral periapical (IOPA) views, a panoramic radiograph (OPG), and one cone-beam CT (CBCT) for implant planning. I learned how positioning, exposure parameters, and patient cooperation affect image quality, and I followed along as the supervisor interpreted each image." },
+        { stage: "Feelings", body: "The physics of beam angle and exposure felt overwhelming at first, and I was frustrated that I could not yet read anatomical landmarks at the same speed as the supervisor. By the end of the week my pattern recognition had improved enough that I could point out the obvious caries and the lamina dura around a few teeth." },
+        { stage: "Evaluation", body: "I performed well on positioning for IOPA views and on identifying anatomical landmarks such as the mental foramen and the maxillary sinus floor. I was weaker at picking up early inter-proximal caries and at distinguishing early peri-apical pathosis from normal variations." },
+        { stage: "Analysis", body: "A radiograph is an adjunct, not a verdict — it must always be correlated with the patient's history and clinical findings, because a shadow on the image is meaningless without a symptom to attach it to. Reading images quickly is a product of seeing many images, not a product of natural ability, so the path forward is volume and feedback." },
+        { stage: "Conclusion", body: "If I had access to a structured atlas and a daily habit of looking at a handful of normal variants, I would stop second-guessing every lamina dura and start reserving attention for genuinely suspicious findings. My weakness is therefore a study habit gap, not a knowledge ceiling." },
+        { stage: "Action Plan", body: "I will spend fifteen minutes a day with a recognised oral radiology atlas, present one interesting case per week in the journal club, and ask the supervisor to point out three normal variants on every shift so I can build a baseline before focusing on pathology." }
+      ]
+    },
+    {
+      id: 4, department: "Oral Medicine &amp; Diagnostics",
+      stages: [
+        { stage: "Description", body: "In the oral medicine and diagnostics rotation I observed history-taking and examination of patients presenting with oral ulcers, white patches, and suspected premalignant lesions. The senior registrar walked me through a head-and-neck examination sequence and a structured history template that captures onset, duration, aggravating factors, and systemic context." },
+        { stage: "Feelings", body: "Some of the patient stories were emotionally heavy, especially when a lesion had been ignored for months. I had to consciously maintain composure during the examination, and I felt the gap between my textbook list of differentials and the registrar's short, focused one." },
+        { stage: "Evaluation", body: "My systematic approach to examination was a strength — I did not skip steps, and the registrar commented that the order of the steps was correct. My weakness was in generating a complete differential; I would anchor on the first plausible diagnosis and forget to include the rarer but more serious possibilities." },
+        { stage: "Analysis", body: "A methodical head-to-toe examination catches what a quick look misses, but a methodical examination is only useful if paired with an equally methodical differential. The registrar's short list was not the result of skipping, but of years of pattern weighting; my long, disorganised list was a sign of inexperience, not of being thorough." },
+        { stage: "Conclusion", body: "I need a written differential checklist by symptom — for example, every white patch should trigger a fixed sequence (leukoplakia, lichen planus, candidiasis, frictional keratosis, malignancy) rather than a free recall. Otherwise I will keep anchoring on whichever diagnosis I read most recently." },
+        { stage: "Action Plan", body: "I will maintain a small clinical diary of cases seen, with one differential checklist per symptom category. I will also ask the supervisor to mark the cases where my differential missed an important possibility, so I can review those symptom categories at the end of each week." }
+      ]
+    }
+  ];
+
+  // ============================================================
+  // RENDER REFLECTIONS into #reflections-container
+  // ============================================================
+  function renderReflections() {
+    var container = document.getElementById('reflections-container');
+    if (!container) return;
+
+    var html = '';
+    REFLECTIONS.forEach(function(r) {
+      var stagesHtml = '';
+      r.stages.forEach(function(s, i) {
+        stagesHtml +=
+          '<li class="grid gap-3 p-6 sm:grid-cols-12 sm:gap-4 sm:p-8">' +
+            '<div class="sm:col-span-4 lg:col-span-3">' +
+              '<div class="flex items-center gap-3">' +
+                '<span class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-accent/20 text-xs font-bold text-accent-foreground ring-1 ring-accent/30">' + (i + 1) + '</span>' +
+                '<h3 class="font-serif text-lg font-semibold text-primary">' + s.stage + '</h3>' +
+              '</div>' +
+            '</div>' +
+            '<p class="text-base leading-relaxed text-foreground/90 sm:col-span-8 lg:col-span-9">' + s.body + '</p>' +
+          '</li>';
+      });
+
+      html +=
+        '<article id="reflection-' + r.id + '" class="surface surface-hover scroll-mt-24 overflow-hidden rounded-2xl border border-border">' +
+          '<header class="relative overflow-hidden border-b border-border bg-gradient-to-br from-primary/8 via-background to-background p-6 sm:p-8">' +
+            '<span class="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full blur-3xl" style="background: radial-gradient(circle,#5a9fd4 0%,transparent 70%);"></span>' +
+            '<p class="relative text-xs font-semibold uppercase tracking-[0.2em] text-accent">Reflection 0' + r.id + '</p>' +
+            '<h2 class="relative mt-2 font-serif text-2xl font-semibold text-primary sm:text-3xl">' + r.department + '</h2>' +
+            '<p class="relative mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">Reflection following the six stages of Gibbs&rsquo; cycle, focusing on what I observed, how I responded, and what I plan to do differently next time.</p>' +
+          '</header>' +
+          '<ol class="divide-y divide-border">' + stagesHtml + '</ol>' +
+        '</article>';
+    });
+    container.innerHTML = html;
+  }
+
+  // ============================================================
+  // NAVIGATION
+  // ============================================================
+  function navigate(view) {
+    // Hide all views
+    document.querySelectorAll('.view').forEach(function(v) { v.classList.remove('active'); });
+    // Show target view
+    var target = document.getElementById('view-' + view);
+    if (target) {
+      target.classList.add('active');
+      // Re-trigger fade animation
+      target.classList.remove('view-fade');
+      void target.offsetWidth; // force reflow
+      target.classList.add('view-fade');
+    }
+
+    // Update desktop nav buttons
+    document.querySelectorAll('.nav-btn').forEach(function(b) {
+      b.classList.toggle('is-active', b.dataset.view === view);
+    });
+    // Update mobile nav buttons
+    document.querySelectorAll('.nav-btn-m').forEach(function(b) {
+      b.classList.toggle('is-active', b.dataset.view === view);
+    });
+
+    // Close mobile menu if open
+    var mm = document.getElementById('mobile-menu');
+    if (mm.classList.contains('open')) {
+      mm.classList.remove('open');
+      document.getElementById('menu-open-icon').classList.remove('hidden');
+      document.getElementById('menu-close-icon').classList.add('hidden');
+    }
+
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Update URL hash so the shareable link opens the right view
+    if (history.replaceState) {
+      history.replaceState(null, '', '#' + view);
+    }
+  }
+
+  function toggleMobile() {
+    var mm = document.getElementById('mobile-menu');
+    var open = mm.classList.toggle('open');
+    document.getElementById('menu-open-icon').classList.toggle('hidden', open);
+    document.getElementById('menu-close-icon').classList.toggle('hidden', !open);
+  }
+
+  // ============================================================
+  // INIT
+  // ============================================================
+  document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('footer-year').textContent = new Date().getFullYear();
+    renderReflections();
+
+    // Restore view from URL hash (so shared links open the right page)
+    var initialView = 'home';
+    if (location.hash) {
+      var hash = location.hash.replace('#', '');
+      if (['home', 'bds1', 'about', 'gibbs'].indexOf(hash) !== -1) {
+        initialView = hash;
+      }
+    }
+    navigate(initialView);
+  });
+</script>
+</body>
+</html>
